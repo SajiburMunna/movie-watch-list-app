@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/Sonner";
+import { Topbar } from "@/components/layout/Topbar";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Topbar />
         {children}
         <Toaster richColors />
       </body>

@@ -1,9 +1,12 @@
-export default function Home() {
-  return (
-    <div>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, tempore
-      nemo! Nemo, rem? Sunt quos nostrum alias iusto laborum placeat cum sequi
-      officia cumque cupiditate quasi, voluptates provident sit veritatis?
-    </div>
-  );
+import { Metadata } from "next";
+
+import Home from "@/features/public/home";
+
+export const metadata: Metadata = {
+  title: "Home | Movie Watch List",
+  description: "Home page of Movie Watch List",
+};
+
+export default function HomePage() {
+  return <Home />;
 }
