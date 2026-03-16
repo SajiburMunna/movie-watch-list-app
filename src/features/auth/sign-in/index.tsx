@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -33,8 +34,32 @@ function SignIn() {
   });
 
   const onSubmit = async (values: SignInValues) => {
-    // TODO: replace with real sign-in API call
-    console.log("Sign in values", values);
+    if (typeof window === "undefined") return;
+
+    const stored = window.localStorage.getItem("mw_users");
+    const users: Array<{ email: string; password: string; name?: string }> =
+      stored ? JSON.parse(stored) : [];
+
+    const match = users.find(
+      (user) =>
+        user.email.toLowerCase() === values.email.toLowerCase() &&
+        user.password === values.password,
+    );
+
+    if (!match) {
+      toast.error("Invalid email or password");
+      return;
+    }
+
+    window.localStorage.setItem(
+      "mw_current_user",
+      JSON.stringify({
+        name: match.name,
+        email: match.email,
+      }),
+    );
+
+    toast.success("Signed in successfully");
   };
 
   return (

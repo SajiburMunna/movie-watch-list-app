@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -35,8 +36,34 @@ function SignUp() {
   });
 
   const onSubmit = async (values: SignUpValues) => {
-    // TODO: replace with real sign-up API call
-    console.log("Sign up values", values);
+    if (typeof window === "undefined") return;
+
+    const stored = window.localStorage.getItem("mw_users");
+    const users: Array<{ name: string; email: string; password: string }> =
+      stored ? JSON.parse(stored) : [];
+
+    const exists = users.find(
+      (user) => user.email.toLowerCase() === values.email.toLowerCase(),
+    );
+
+    if (!exists) {
+      users.push({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
+      window.localStorage.setItem("mw_users", JSON.stringify(users));
+    }
+
+    window.localStorage.setItem(
+      "mw_current_user",
+      JSON.stringify({
+        name: values.name,
+        email: values.email,
+      }),
+    );
+
+    toast.success("Account created! Welcome to MovieWatch.");
   };
 
   return (
