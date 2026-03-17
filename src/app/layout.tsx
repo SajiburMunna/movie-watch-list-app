@@ -4,8 +4,9 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/Sonner";
 import { Topbar } from "@/components/layout/Topbar";
+import { QueryProvider } from "@/components/provider/query-provider";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Topbar />
-        {children}
-        <Toaster richColors />
+        <QueryProvider>
+          <Topbar />
+          {children}
+          <Toaster richColors />
+        </QueryProvider>
       </body>
     </html>
   );
