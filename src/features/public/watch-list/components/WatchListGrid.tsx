@@ -50,7 +50,9 @@ export function WatchListGrid({
               <p className="line-clamp-1 text-sm font-semibold text-white">
                 {getMovieTitle(movie)}
               </p>
-              <p className="text-xs text-neutral-300">{getYear(movie) || "—"}</p>
+              <p className="text-xs text-neutral-300">
+                {getYear(movie) || "—"}
+              </p>
             </div>
           </Link>
 
@@ -67,4 +69,3 @@ export function WatchListGrid({
     </div>
   );
 }
-

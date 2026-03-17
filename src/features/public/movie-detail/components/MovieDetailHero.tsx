@@ -15,7 +15,6 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
   const { user, isInList, toggle } = useWatchList();
   const title = getMovieTitle(movie);
   const releaseDate = movie.release_date ?? movie.first_air_date ?? "";
-  const year = releaseDate.slice(0, 4);
   const inList = isInList(movie.id);
   const genres = (movie.genres ?? []).map((g) => g.name).filter(Boolean);
 
@@ -35,7 +34,10 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
         <section className="relative overflow-hidden rounded-2xl border border-white/5 bg-neutral-950 shadow-2xl">
           <div className="absolute inset-0">
             <Image
-              src={getImageUrl(movie.backdrop_path ?? movie.poster_path, "original")}
+              src={getImageUrl(
+                movie.backdrop_path ?? movie.poster_path,
+                "original",
+              )}
               alt={title}
               fill
               priority
@@ -101,11 +103,13 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
                   type="button"
                   onClick={() => {
                     if (!user) {
-                      toast.error("Please sign in to use My List");
+                      toast.error("Please sign in to use Watchlist");
                       return;
                     }
                     toggle(movie.id);
-                    toast.success(inList ? "Removed from My List" : "Added to My List");
+                    toast.success(
+                      inList ? "Removed from Watchlist" : "Added to Watchlist",
+                    );
                   }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-medium text-neutral-100 hover:bg-black/70 md:text-sm"
                 >
@@ -119,4 +123,3 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
     </main>
   );
 }
-

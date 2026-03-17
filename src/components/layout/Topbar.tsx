@@ -4,10 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Search, Bell, User as UserIcon } from "lucide-react";
+import { Bell, User as UserIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 
 type CurrentUser = {
   name?: string;
@@ -21,8 +20,6 @@ type TopbarProps = {
 function Topbar({ onSearchChange }: TopbarProps) {
   const router = useRouter();
   const [user, setUser] = React.useState<CurrentUser>(null);
-  const [search, setSearch] = React.useState("");
-  const [isSearchFocused, setIsSearchFocused] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -49,16 +46,6 @@ function Topbar({ onSearchChange }: TopbarProps) {
     router.push("/");
   };
 
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    onSearchChange?.(value);
-  };
-
-  const handleSearchSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onSearchChange?.(search);
-  };
-
   return (
     <header className="sticky top-0 z-30 border-b border-neutral-800 bg-black/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6 lg:px-8">
@@ -73,34 +60,7 @@ function Topbar({ onSearchChange }: TopbarProps) {
             </span>
           </Link>
         </div>
-
-        {/* Search */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="ml-auto flex flex-1 items-center justify-end gap-3"
-        >
-          <div
-            className={[
-              "relative flex items-center transition-all duration-200",
-              "max-w-xs flex-1 sm:max-w-sm md:max-w-md",
-            ].join(" ")}
-          >
-            <Search className="pointer-events-none absolute left-3 h-4 w-4 text-neutral-500" />
-            <Input
-              value={search}
-              onChange={(event) => handleSearchChange(event.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-              placeholder="Search for titles, genres, people"
-              className={[
-                "h-9 w-full rounded-full border border-neutral-700 bg-neutral-900/80",
-                "pl-9 pr-3 text-sm text-neutral-100 placeholder:text-neutral-500",
-                "shadow-[0_0_0_1px_rgba(0,0,0,0.3)] transition-all duration-200",
-                isSearchFocused ? "border-neutral-400 bg-neutral-900" : "",
-              ].join(" ")}
-            />
-          </div>
-        </form>
+        <div className="ml-auto" />
 
         {/* User / actions */}
         <div className="hidden items-center gap-3 sm:flex">

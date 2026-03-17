@@ -9,6 +9,7 @@ import {
 } from "./api/movies-queries";
 import { HeroSection } from "./components/HeroSection";
 import { MovieRow } from "./components/MovieRow";
+import { HomeSearchBar } from "./components/HomeSearchBar";
 
 const pickHeroMovie = (movies?: TmdbMovie[]) => {
   if (!movies || movies.length === 0) return undefined;
@@ -31,6 +32,7 @@ function Home() {
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-linear-to-b from-neutral-950 via-neutral-950 to-neutral-950 text-neutral-50">
       <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+        <HomeSearchBar />
         <HeroSection movie={heroMovie} />
 
         <div className="space-y-8">
