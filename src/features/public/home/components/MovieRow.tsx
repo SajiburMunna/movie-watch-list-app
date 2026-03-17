@@ -1,10 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { toast } from "sonner";
+import { Check, Plus } from "lucide-react";
+
 import type { TmdbMovie } from "../api/movies-queries";
 import { getImageUrl, getMovieTitle } from "../utils/utils";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useWatchList } from "@/features/public/watch-list/hooks/use-watch-list";
 
 type RowProps = {
   title: string;
@@ -12,7 +16,11 @@ type RowProps = {
   isLoading: boolean;
 };
 
+const getYear = (movie: TmdbMovie) =>
+  (movie.release_date ?? movie.first_air_date ?? "").slice(0, 4);
+
 export function MovieRow({ title, movies, isLoading }: RowProps) {
+  const { user, isInList, toggle } = useWatchList();
   return (
     <section className="space-y-3">
       <h2 className="text-lg font-semibold text-neutral-100 md:text-xl">
@@ -33,36 +41,71 @@ export function MovieRow({ title, movies, isLoading }: RowProps) {
           <ScrollArea className="w-full">
             <div className="flex w-max gap-3 pb-2">
               {movies.map((movie) => (
-                <Link
+                <article
                   key={movie.id}
-                  href={`/movie/${movie.id}`}
-                  className="group relative block h-40 w-28 shrink-0 cursor-pointer overflow-hidden rounded-md bg-neutral-900 shadow-md transition-transform duration-200 hover:z-10 hover:scale-110 md:h-52 md:w-36"
+                  className="relative h-44 w-32 shrink-0 overflow-hidden rounded-md border border-white/5 bg-neutral-900 shadow-md md:h-60 md:w-40"
                 >
-                  <img
-                    src={getImageUrl(movie.poster_path, "w300")}
-                    alt={getMovieTitle(movie)}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-                  <div className="pointer-events-none absolute inset-x-1 bottom-1 space-y-1 text-xs text-neutral-50 opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:text-sm">
-                    <p className="line-clamp-1 font-semibold">
-                      {getMovieTitle(movie)}
-                    </p>
-                    <p className="flex items-center gap-1 text-[10px] text-neutral-300 md:text-xs">
-                      <span className="rounded-sm bg-neutral-900/70 px-1 py-0.5 text-[10px] font-semibold text-emerald-400 md:text-xs">
-                        {movie.vote_average
-                          ? movie.vote_average.toFixed(1)
-                          : "NR"}
-                      </span>
-                      <span className="line-clamp-1">
-                        {(movie.release_date ?? movie.first_air_date ?? "").slice(
-                          0,
-                          4,
-                        )}
-                      </span>
-                    </p>
+                  <div className="absolute inset-0">
+                    <Image
+                      src={getImageUrl(movie.poster_path, "w300")}
+                      alt={getMovieTitle(movie)}
+                      fill
+                      sizes="(min-width: 768px) 160px, 128px"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-transparent" />
                   </div>
-                </Link>
+
+                  <div className="relative flex h-full flex-col justify-end gap-2 p-2">
+                    <div className="space-y-0.5">
+                      <p className="line-clamp-1 text-xs font-semibold text-white md:text-sm">
+                        {getMovieTitle(movie)}
+                      </p>
+                      <p className="text-[11px] text-neutral-300 md:text-xs">
+                        {getYear(movie) || "—"}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/movie/${movie.id}`}
+                        className="inline-flex flex-1 items-center justify-center rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-semibold text-black hover:bg-white md:text-xs"
+                      >
+                        Details
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!user) {
+                            toast.error("Please sign in to use Watchlist");
+                            return;
+                          }
+                          const inList = isInList(movie.id);
+                          toggle(movie.id);
+                          toast.success(
+                            inList
+                              ? "Removed from Watchlist"
+                              : "Added to Watchlist",
+                          );
+                        }}
+                        className="inline-flex cursor-pointer flex-1 items-center justify-center rounded-full bg-red-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-red-700 md:text-xs"
+                      >
+                        {isInList(movie.id) ? (
+                          <>
+                            <Check className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Watchlist</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Watchlist</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
           </ScrollArea>
