@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -22,6 +23,7 @@ import {
 } from "@/features/auth/validation/auth";
 
 function SignIn() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -61,6 +63,7 @@ function SignIn() {
     );
 
     toast.success("Signed in successfully");
+    router.push("/");
   };
 
   return (

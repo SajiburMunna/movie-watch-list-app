@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -22,6 +23,7 @@ import {
 } from "@/features/auth/validation/auth";
 
 function SignUp() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -65,6 +67,7 @@ function SignUp() {
     );
 
     toast.success("Account created! Welcome to MovieWatch.");
+    router.push("/");
   };
 
   return (
