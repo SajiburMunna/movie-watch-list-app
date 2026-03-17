@@ -13,11 +13,7 @@ type CurrentUser = {
   email: string;
 } | null;
 
-type TopbarProps = {
-  onSearchChange?: (query: string) => void;
-};
-
-function Topbar({ onSearchChange }: TopbarProps) {
+function Topbar() {
   const router = useRouter();
   const [user, setUser] = React.useState<CurrentUser>(null);
 
@@ -77,7 +73,7 @@ function Topbar({ onSearchChange }: TopbarProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => router.push("/watch-list")}
-                className="hidden text-sm font-medium text-neutral-100 hover:bg-neutral-900/70 md:inline-flex"
+                className="hidden text-sm font-medium text-neutral-100  md:inline-flex"
               >
                 My List
               </Button>
@@ -92,7 +88,7 @@ function Topbar({ onSearchChange }: TopbarProps) {
                 size="sm"
                 type="button"
                 onClick={handleLogout}
-                className="border-neutral-700 bg-black/60 text-xs font-medium text-neutral-100 hover:bg-neutral-900"
+                className="border-neutral-700 bg-black/60 text-xs font-medium text-neutral-100"
               >
                 Logout
               </Button>
@@ -104,7 +100,7 @@ function Topbar({ onSearchChange }: TopbarProps) {
                 variant="ghost"
                 size="sm"
                 type="button"
-                className="text-xs font-medium text-neutral-100 hover:bg-neutral-900/70"
+                className="text-xs font-medium text-neutral-100"
               >
                 <Link href="/sign-in">Sign in</Link>
               </Button>

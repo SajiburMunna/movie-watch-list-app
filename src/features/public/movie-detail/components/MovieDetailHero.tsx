@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeft, Star } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,16 +33,16 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
 
         <section className="relative overflow-hidden rounded-2xl border border-white/5 bg-neutral-950 shadow-2xl">
           <div className="absolute inset-0">
-            <Image
+            <img
               src={getImageUrl(
                 movie.backdrop_path ?? movie.poster_path,
                 "original",
               )}
               alt={title}
-              fill
-              priority
-              sizes="(min-width: 1024px) 1152px, 100vw"
-              className="object-cover opacity-70"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="h-full w-full object-cover opacity-70"
             />
             <div className="absolute inset-0 bg-linear-to-r from-black via-black/75 to-transparent" />
             <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-neutral-950/40" />
@@ -51,12 +51,12 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
           <div className="relative z-10 flex flex-col gap-6 px-6 py-8 sm:px-10 sm:py-12 md:flex-row md:items-end md:gap-8">
             <div className="flex items-end gap-4">
               <div className="relative hidden h-44 w-32 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-lg sm:block md:h-56 md:w-40">
-                <Image
+                <img
                   src={getImageUrl(movie.poster_path, "w500")}
                   alt={title}
-                  fill
-                  sizes="(min-width: 768px) 160px, 128px"
-                  className="object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
                       inList ? "Removed from Watchlist" : "Added to Watchlist",
                     );
                   }}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-medium text-neutral-100 hover:bg-black/70 md:text-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-medium text-neutral-100 hover:bg-black/70 md:text-sm cursor-pointer"
                 >
                   {inList ? "Remove from Watchlist" : "+ Watchlist"}
                 </button>
