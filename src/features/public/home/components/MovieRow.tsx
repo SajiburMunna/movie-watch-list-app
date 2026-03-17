@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { toast } from "sonner";
 import { Check, Plus } from "lucide-react";
 
@@ -46,12 +45,12 @@ export function MovieRow({ title, movies, isLoading }: RowProps) {
                   className="relative h-44 w-32 shrink-0 overflow-hidden rounded-md border border-white/5 bg-neutral-900 shadow-md md:h-60 md:w-40"
                 >
                   <div className="absolute inset-0">
-                    <Image
+                    <img
                       src={getImageUrl(movie.poster_path, "w300")}
                       alt={getMovieTitle(movie)}
-                      fill
-                      sizes="(min-width: 768px) 160px, 128px"
-                      className="object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-transparent" />
                   </div>

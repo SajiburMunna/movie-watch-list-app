@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import type { TmdbMovie } from "../api/movies-queries";
 import { getImageUrl, getMovieTitle } from "../utils/utils";
 
@@ -15,16 +13,12 @@ export function HeroSection({ movie }: HeroSectionProps) {
   return (
     <section className="relative mb-10 overflow-hidden rounded-2xl border border-white/5 bg-neutral-950 shadow-2xl">
       <div className="absolute inset-0">
-        <Image
-          src={getImageUrl(
-            movie.backdrop_path ?? movie.poster_path,
-            "original",
-          )}
+        <img
+          src={getImageUrl(movie.backdrop_path ?? movie.poster_path, "original")}
           alt={getMovieTitle(movie)}
-          fill
-          priority
-          sizes="(min-width: 1024px) 1152px, 100vw"
-          className="object-cover opacity-60"
+          loading="eager"
+          decoding="async"
+          className="h-full w-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent" />
         <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-neutral-950/40" />

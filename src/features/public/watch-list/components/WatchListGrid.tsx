@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 
@@ -37,11 +36,13 @@ export function WatchListGrid({
             href={`/movie/${movie.id}`}
             className="relative block overflow-hidden rounded-xl border border-white/5 bg-neutral-900 shadow-md"
           >
-            <Image
+            <img
               src={getImageUrl(movie.poster_path, "w500")}
               alt={getMovieTitle(movie)}
               width={500}
               height={750}
+              loading="lazy"
+              decoding="async"
               className="aspect-2/3 w-full object-cover"
             />
 
