@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Play, Star } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 import { toast } from "sonner";
 
 import type { TmdbMovie } from "@/features/public/home/api/movies-queries";
@@ -14,8 +14,10 @@ type MovieDetailHeroProps = {
 export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
   const { user, isInList, toggle } = useWatchList();
   const title = getMovieTitle(movie);
-  const year = (movie.release_date ?? movie.first_air_date ?? "").slice(0, 4);
+  const releaseDate = movie.release_date ?? movie.first_air_date ?? "";
+  const year = releaseDate.slice(0, 4);
   const inList = isInList(movie.id);
+  const genres = (movie.genres ?? []).map((g) => g.name).filter(Boolean);
 
   return (
     <main className="h-full bg-neutral-950 text-neutral-50">
@@ -26,7 +28,7 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
             className="inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-xs font-medium text-neutral-100 ring-1 ring-white/10 hover:bg-black/80"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to browsing
+            Back to search
           </Link>
         </div>
 
@@ -44,7 +46,19 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
             <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-neutral-950/40" />
           </div>
 
-          <div className="relative z-10 flex flex-col gap-8 px-6 py-8 sm:px-10 sm:py-12 md:flex-row md:items-end">
+          <div className="relative z-10 flex flex-col gap-6 px-6 py-8 sm:px-10 sm:py-12 md:flex-row md:items-end md:gap-8">
+            <div className="flex items-end gap-4">
+              <div className="relative hidden h-44 w-32 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-lg sm:block md:h-56 md:w-40">
+                <Image
+                  src={getImageUrl(movie.poster_path, "w500")}
+                  alt={title}
+                  fill
+                  sizes="(min-width: 768px) 160px, 128px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
             <div className="flex flex-1 flex-col gap-4 md:gap-5">
               <div className="space-y-2">
                 <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-emerald-300/80">
@@ -56,9 +70,14 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
               </div>
 
               <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-200 md:text-sm">
-                {year && (
+                {releaseDate && (
                   <span className="rounded-full bg-neutral-900/80 px-3 py-1 text-neutral-100">
-                    {year}
+                    {releaseDate}
+                  </span>
+                )}
+                {genres.length > 0 && (
+                  <span className="rounded-full border border-white/15 bg-neutral-900/60 px-3 py-1 text-neutral-200">
+                    {genres.slice(0, 3).join(" • ")}
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 font-semibold text-black shadow-md">
@@ -70,18 +89,14 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
                 </span>
               </div>
 
-              <p className="max-w-2xl text-sm text-neutral-200 md:text-base">
-                {movie.overview}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-neutral-100">Plot</p>
+                <p className="max-w-2xl text-sm text-neutral-200 md:text-base">
+                  {movie.overview}
+                </p>
+              </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-600/30 hover:bg-red-700"
-                >
-                  <Play className="h-4 w-4 fill-white text-white" />
-                  Play trailer
-                </button>
                 <button
                   type="button"
                   onClick={() => {
@@ -94,7 +109,7 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
                   }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-medium text-neutral-100 hover:bg-black/70 md:text-sm"
                 >
-                  {inList ? "✓ In My List" : "+ My List"}
+                  {inList ? "Remove from Watchlist" : "+ Watchlist"}
                 </button>
               </div>
             </div>

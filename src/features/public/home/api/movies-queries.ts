@@ -15,6 +15,7 @@ type TmdbMovie = {
   vote_average: number;
   release_date?: string;
   first_air_date?: string;
+  genres?: Array<{ id: number; name: string }>;
 };
 
 type TmdbPaginatedResponse = {
