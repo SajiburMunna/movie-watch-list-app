@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import Link from "next/link";
 import type { TmdbMovie } from "../api/movies-queries";
 import { getImageUrl, getMovieTitle } from "../utils/utils";
 import { ScrollArea } from "@/components/ui/ScrollArea";
@@ -32,9 +33,10 @@ export function MovieRow({ title, movies, isLoading }: RowProps) {
           <ScrollArea className="w-full">
             <div className="flex w-max gap-3 pb-2">
               {movies.map((movie) => (
-                <article
+                <Link
                   key={movie.id}
-                  className="group relative h-40 w-28 shrink-0 cursor-pointer overflow-hidden rounded-md bg-neutral-900 shadow-md transition-transform duration-200 hover:z-10 hover:scale-110 md:h-52 md:w-36"
+                  href={`/movie/${movie.id}`}
+                  className="group relative block h-40 w-28 shrink-0 cursor-pointer overflow-hidden rounded-md bg-neutral-900 shadow-md transition-transform duration-200 hover:z-10 hover:scale-110 md:h-52 md:w-36"
                 >
                   <img
                     src={getImageUrl(movie.poster_path, "w300")}
@@ -60,7 +62,7 @@ export function MovieRow({ title, movies, isLoading }: RowProps) {
                       </span>
                     </p>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           </ScrollArea>
