@@ -1,18 +1,21 @@
-/* eslint-disable @next/next/no-img-element */
-
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Play, Star } from "lucide-react";
+import { toast } from "sonner";
 
 import type { TmdbMovie } from "@/features/public/home/api/movies-queries";
 import { getImageUrl, getMovieTitle } from "@/features/public/home/utils/utils";
+import { useWatchList } from "@/features/public/watch-list/hooks/use-watch-list";
 
 type MovieDetailHeroProps = {
   movie: TmdbMovie;
 };
 
 export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
+  const { user, isInList, toggle } = useWatchList();
   const title = getMovieTitle(movie);
   const year = (movie.release_date ?? movie.first_air_date ?? "").slice(0, 4);
+  const inList = isInList(movie.id);
 
   return (
     <main className="h-full bg-neutral-950 text-neutral-50">
@@ -29,10 +32,13 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
 
         <section className="relative overflow-hidden rounded-2xl border border-white/5 bg-neutral-950 shadow-2xl">
           <div className="absolute inset-0">
-            <img
+            <Image
               src={getImageUrl(movie.backdrop_path ?? movie.poster_path, "original")}
               alt={title}
-              className="h-full w-full object-cover opacity-70"
+              fill
+              priority
+              sizes="(min-width: 1024px) 1152px, 100vw"
+              className="object-cover opacity-70"
             />
             <div className="absolute inset-0 bg-linear-to-r from-black via-black/75 to-transparent" />
             <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-neutral-950/40" />
@@ -78,9 +84,17 @@ export function MovieDetailHero({ movie }: MovieDetailHeroProps) {
                 </button>
                 <button
                   type="button"
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("Please sign in to use My List");
+                      return;
+                    }
+                    toggle(movie.id);
+                    toast.success(inList ? "Removed from My List" : "Added to My List");
+                  }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-medium text-neutral-100 hover:bg-black/70 md:text-sm"
                 >
-                  + My List
+                  {inList ? "✓ In My List" : "+ My List"}
                 </button>
               </div>
             </div>
