@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { ApiClient } from "@/lib/api-client";
 
 const TMDB_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const TMDB_BASE_URL =
+  process.env.NEXT_PUBLIC_TMDB_BASE_URL ?? "https://api.themoviedb.org/3";
 
 type TmdbMovie = {
   id: number;
@@ -22,34 +24,21 @@ type TmdbPaginatedResponse = {
   total_results: number;
 };
 
-const buildTmdbUrl = (path: string, params?: Record<string, string | number>) => {
-  const url = new URL(`${TMDB_BASE_URL}${path}`);
-
-  if (TMDB_API_KEY) {
-    url.searchParams.set("api_key", TMDB_API_KEY);
-  }
-
-  if (params) {
-    Object.entries(params).forEach(([key, value]) =>
-      url.searchParams.set(key, String(value)),
-    );
-  }
-
-  return url.toString();
-};
-
 const fetchTmdb = async (
   path: string,
   params?: Record<string, string | number>,
 ): Promise<TmdbPaginatedResponse> => {
-  const url = buildTmdbUrl(path, params);
-  const res = await fetch(url);
+  const client = new ApiClient({
+    baseUrl: TMDB_BASE_URL,
+    withCredentials: false,
+  });
 
-  if (!res.ok) {
-    throw new Error(`TMDB request failed with status ${res.status}`);
-  }
-
-  return res.json();
+  return client.get<TmdbPaginatedResponse>(path, {
+    query: {
+      api_key: TMDB_API_KEY ?? "",
+      ...(params ?? {}),
+    },
+  });
 };
 
 export const movieKeys = {

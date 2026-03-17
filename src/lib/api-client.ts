@@ -14,6 +14,7 @@ export type ApiClientConfig = {
   baseUrl?: string;
   defaultHeaders?: Record<string, string>;
   timeoutMs?: number;
+  withCredentials?: boolean;
 };
 
 export type RequestOptions = {
@@ -34,7 +35,7 @@ export class ApiClient {
     this.axios = axios.create({
       baseURL,
       timeout: config?.timeoutMs ?? DEFAULT_TIMEOUT,
-      withCredentials: true,
+      withCredentials: config?.withCredentials ?? true,
       headers: {
         "Content-Type": "application/json",
         ...(config?.defaultHeaders ?? {}),

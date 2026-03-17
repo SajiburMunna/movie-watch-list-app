@@ -17,24 +17,16 @@ const pickHeroMovie = (movies?: TmdbMovie[]) => {
 };
 
 function Home() {
-  const {
-    data: trendingData,
-    isLoading: isTrendingLoading,
-  } = useTrendingMovies();
-  const {
-    data: popularData,
-    isLoading: isPopularLoading,
-  } = usePopularMovies();
-  const {
-    data: topRatedData,
-    isLoading: isTopRatedLoading,
-  } = useTopRatedMovies();
-  const {
-    data: actionData,
-    isLoading: isActionLoading,
-  } = useActionMovies();
+  const { data: trendingData, isLoading: isTrendingLoading } =
+    useTrendingMovies();
+  const { data: popularData, isLoading: isPopularLoading } = usePopularMovies();
+  const { data: topRatedData, isLoading: isTopRatedLoading } =
+    useTopRatedMovies();
+  const { data: actionData, isLoading: isActionLoading } = useActionMovies();
 
-  const heroMovie = pickHeroMovie(trendingData?.results ?? popularData?.results);
+  const heroMovie = pickHeroMovie(
+    trendingData?.results ?? popularData?.results,
+  );
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-linear-to-b from-neutral-950 via-neutral-950 to-neutral-950 text-neutral-50">

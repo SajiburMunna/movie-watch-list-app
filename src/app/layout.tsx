@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/Sonner";
-import { Topbar } from "@/components/layout/Topbar";
 import { QueryProvider } from "@/components/provider/query-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -29,12 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", inter.variable)}>
+    <html
+      lang="en"
+      className={cn("font-sans bg-neutral-950 text-neutral-50", inter.variable)}
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-dvh overflow-hidden bg-neutral-950 text-neutral-50 antialiased`}
       >
         <QueryProvider>
-          <Topbar />
           {children}
           <Toaster richColors />
         </QueryProvider>

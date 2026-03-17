@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AuthCard } from "@/features/auth/components/AuthCard";
 import {
   Field,
   FieldContent,
@@ -63,23 +64,21 @@ function SignIn() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md rounded-xl border bg-card p-8 shadow-lg">
-        <div className="mb-6 space-y-2 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back to MovieWatch
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Sign in to continue your watchlist and pick up where you left off.
-          </p>
-        </div>
-
+    <AuthCard
+      title="Welcome back"
+      subtitle="Sign in to continue your watchlist and pick up where you left off."
+      footerText="New to MovieWatch?"
+      footerLinkHref="/sign-up"
+      footerLinkText="Create an account"
+    >
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldSet className="gap-4">
             <FieldLegend className="sr-only">Sign in form</FieldLegend>
 
             <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <FieldLabel htmlFor="email" className="text-neutral-200">
+                Email
+              </FieldLabel>
               <FieldContent>
                 <Input
                   id="email"
@@ -87,6 +86,7 @@ function SignIn() {
                   autoComplete="email"
                   placeholder="you@moviefan.com"
                   aria-invalid={!!errors.email}
+                  className="border-neutral-700 bg-neutral-900/70 text-neutral-100 placeholder:text-neutral-500 focus-visible:border-neutral-300 focus-visible:ring-neutral-300/20"
                   {...register("email")}
                 />
                 <FieldError
@@ -104,7 +104,9 @@ function SignIn() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <FieldLabel htmlFor="password" className="text-neutral-200">
+                Password
+              </FieldLabel>
               <FieldContent>
                 <Input
                   id="password"
@@ -112,6 +114,7 @@ function SignIn() {
                   autoComplete="current-password"
                   placeholder="••••••••"
                   aria-invalid={!!errors.password}
+                  className="border-neutral-700 bg-neutral-900/70 text-neutral-100 placeholder:text-neutral-500 focus-visible:border-neutral-300 focus-visible:ring-neutral-300/20"
                   {...register("password")}
                 />
                 <FieldError
@@ -129,32 +132,25 @@ function SignIn() {
             </Field>
 
             <div className="flex items-center justify-between text-sm">
-              <div className="text-muted-foreground"></div>
+              <div className="text-neutral-400" />
               <Link
                 href="/forgot-password"
-                className="font-medium text-primary underline-offset-4 hover:underline"
+                className="font-medium text-neutral-200 underline-offset-4 hover:text-white hover:underline"
               >
                 Forgot password?
               </Link>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full bg-red-600 font-semibold text-white hover:bg-red-700"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Signing in..." : "Continue"}
             </Button>
           </FieldSet>
         </form>
-
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/sign-up"
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthCard>
   );
 }
 
